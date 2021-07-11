@@ -34,6 +34,7 @@ public class JsonPlaceHolderTest extends TestConfig {
 
     @Test
     public void PostWithJson() {
+
         String postJsonBody = "{\n" +
                 "\"title\":\"foo\",\n" +
                 "\"body\":\"bar\",\n" +
