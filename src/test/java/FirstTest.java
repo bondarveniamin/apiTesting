@@ -10,6 +10,7 @@ import static constants.Constants.Actions.SWAPI_GET_PEOPLE;
 import static constants.Constants.Path.SWAPI_PATH;
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 
 
@@ -78,5 +79,12 @@ public class FirstTest extends TestConfig {
         when().get("https://maps.googleapis.com/maps/api/place/findplacefromtext/xml?key=AIzaSyCOJH8qWMczERKiVzBPXj1QJLKZzKEEvi8&input=New York&inputtype=textquery&fields=business_status,formatted_address,geometry,icon,name,permanently_closed,photos,place_id,plus_code,types&language=ru").
         then().body(matchesXsdInClasspath("xmlSchema.xsd")).
         log().body();
+    }
+    @Test
+    public void validatejsonExample(){
+        given().log().uri().
+                when().get("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyCOJH8qWMczERKiVzBPXj1QJLKZzKEEvi8&input=New York&inputtype=textquery&fields=business_status,formatted_address,geometry,icon,name,permanently_closed,photos,place_id,plus_code,types&language=ru").
+                then().body(matchesJsonSchemaInClasspath("jsonSchema.json")).
+                log().body();
     }
 }
