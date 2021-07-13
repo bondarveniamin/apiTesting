@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.apache.http.Header;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static constants.Constants.Actions.SWAPI_GET_PEOPLE;
@@ -86,5 +87,34 @@ public class FirstTest extends TestConfig {
                 when().get("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyCOJH8qWMczERKiVzBPXj1QJLKZzKEEvi8&input=New York&inputtype=textquery&fields=business_status,formatted_address,geometry,icon,name,permanently_closed,photos,place_id,plus_code,types&language=ru").
                 then().body(matchesJsonSchemaInClasspath("jsonSchema.json")).
                 log().body();
+    }
+
+    @Test
+    public void getMapOfElementSomeKey(){
+        Response response =
+                given().spec(requestSpecificationForSwapiTests).log().uri().
+                        when().get(SWAPI_PATH + SWAPI_GET_PEOPLE);
+        Map<String, ?> someObject = response
+                .path("results.find {it.name = 'Luke Skywalker'}");
+        System.out.println("someObject -->" + someObject);
+    }
+    @Test
+    public void getSingleElementWithSomeKey() {
+        Response response =
+            given().spec(requestSpecificationForSwapiTests).log().uri().
+                when().get(SWAPI_PATH + SWAPI_GET_PEOPLE);
+        String uri = response
+                .path("results.find {it.name = 'Luke Skywalker'}.url");
+        System.out.println("uri -->" + uri);
+    }
+
+    @Test
+    public void getAllElementsWithSomeKey() {
+        Response response =
+                given().spec(requestSpecificationForSwapiTests).log().uri().
+                        when().get(SWAPI_PATH + SWAPI_GET_PEOPLE);
+        List films = response
+                .path("results.findAll {it.films}.name");
+        System.out.println("films -->" + films);
     }
 }
